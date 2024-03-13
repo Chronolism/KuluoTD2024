@@ -24,6 +24,10 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     public bool isPlayerTurn = true;
     /// <summary>
+    /// 如果获胜了，它的获胜方式是
+    /// </summary>
+    public E_WinWay winWay = E_WinWay.None;
+    /// <summary>
     /// 场上所有的Slot
     /// </summary>
     public List<Slot> slots = new List<Slot>();
@@ -69,8 +73,11 @@ public class GameLogic : MonoBehaviour
         int[,] targetTest = WinRule(input);
         for (int i = 0; i < targetTest.GetLength(0); i++)
         {
-            if (slots[targetTest[i,0]].icon == targetIcon && slots[targetTest[i, 1]].icon == targetIcon)
+            if (slots[targetTest[i, 0]].icon == targetIcon && slots[targetTest[i, 1]].icon == targetIcon)
+            {
+                winWay = (E_WinWay)targetTest[i, 2];
                 return true;
+            }
         }
         return false;
     }
@@ -124,33 +131,33 @@ public class GameLogic : MonoBehaviour
     }
     /// <summary>
     /// 考虑到用交错数组有点大材小用
-    /// 这里返回2个2个数字的二维数组
+    /// 这里返回2个2个数字以及获胜信息的数组编号的二维数组
     /// 即传入一个目标点位后需要检测胜利的条件
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    int[,] WinRule(int index)
+     int[,] WinRule(int index)
     {
         switch (index)
         {
             case 1:
-                return new int[,] { { 2, 3 }, { 4, 7 }, { 5, 9 } };
+                return new int[,] { { 2, 3, (int)E_WinWay.Row1 }, { 4, 7 , (int)E_WinWay.Line1 }, { 5, 9, (int)E_WinWay.Slash1 } };
             case 2:
-                return new int[,] { { 1, 3 }, { 5, 8 } };
+                return new int[,] { { 1, 3, (int)E_WinWay.Row1 }, { 5, 8, (int)E_WinWay.Line2 } };
             case 3:
-                return new int[,] { { 1, 2 }, { 6, 9 }, { 5, 7 } };
+                return new int[,] { { 1, 2, (int)E_WinWay.Row1 }, { 6, 9, (int)E_WinWay.Line3 }, { 5, 7 , (int)E_WinWay.Slash2 } };
             case 4:
-                return new int[,] { { 5, 6 }, { 1, 7 } };
+                return new int[,] { { 5, 6, (int)E_WinWay.Row2 }, { 1, 7, (int)E_WinWay.Line1 } };
             case 5:
-                return new int[,] { { 4, 6 }, { 2, 8 }, { 1, 9 }, { 3, 7 } };
+                return new int[,] { { 4, 6, (int)E_WinWay.Row2 }, { 2, 8, (int)E_WinWay.Line2 }, { 1, 9, (int)E_WinWay.Slash1 }, { 3, 7, (int)E_WinWay.Slash2 } };
             case 6:
-                return new int[,] { { 4, 5 }, { 3, 9 } };
+                return new int[,] { { 4, 5, (int)E_WinWay.Row2 }, { 3, 9, (int)E_WinWay.Row2 } };
             case 7:
-                return new int[,] { { 8, 9 }, { 1, 4 }, { 5, 3 } };
+                return new int[,] { { 8, 9, (int)E_WinWay.Row3 }, { 1, 4, (int)E_WinWay.Line1 }, { 5, 3, (int)E_WinWay.Slash2 } };
             case 8:
-                return new int[,] { { 7, 9 }, { 2, 5 } };
+                return new int[,] { { 7, 9, (int)E_WinWay.Row3 }, { 2, 5, (int)E_WinWay.Line2 } };
             case 9:
-                return new int[,] { { 7, 8 }, { 3, 6 }, { 1, 5 } };
+                return new int[,] { { 7, 8, (int)E_WinWay.Row3 }, { 3, 6, (int)E_WinWay.Line3 }, { 1, 5, (int)E_WinWay.Slash1 } };
         }
         return null;
     }
@@ -170,4 +177,11 @@ public class GameLogic : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
         if (Input.GetKeyDown(KeyCode.BackQuote)) GameManager.Instance.AwakeOrHideConsole();
     }
+}
+/// <summary>
+/// 获胜的方式
+/// </summary>
+public enum E_WinWay
+{
+    Line1, Line2, Line3, Row1, Row2, Row3, Slash1, Slash2, None
 }

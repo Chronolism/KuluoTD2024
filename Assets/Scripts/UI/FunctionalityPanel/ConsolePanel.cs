@@ -78,7 +78,7 @@ public class ConsolePanel : MonoBehaviour
     {
         if (command == "Help")
         {
-            Report("Clear清屏;\nFirst改变默认先手顺序;\nPattern改变默认先手图案;");
+            Report("Clear清屏;\nFirst改变默认先手顺序;\nPattern改变默认先手图案;\nStart由控制台开始游戏;\nReload由控制台重启游戏;");
             return;
         }
         if (command == "Clear")
@@ -96,6 +96,32 @@ public class ConsolePanel : MonoBehaviour
         {
             GameManager.Instance.defaultPattern = GameManager.Instance.defaultPattern == 0 ? 1 : 0;
             Report("修改成功，下一局生效");
+            return;
+        }
+        if (command == "Start")
+        {
+            if (GameManager.Instance.gameLogic.gameIsRunning)
+            {
+                Report("<color=red>游戏已在运行</color>");
+                return;
+            }
+            if (GameManager.Instance.gamePanel == null)
+                GameManager.Instance.GameStart();
+            else GameManager.Instance.gamePanel.StartGame();
+            Report("已由控制台开始游戏");
+            return;
+        }
+        if (command == "Reload")
+        {
+            if (GameManager.Instance.gameLogic.gameIsRunning)
+            {
+                Report("<color=red>游戏已在运行</color>");
+                return;
+            }
+            if (GameManager.Instance.gamePanel == null)
+                GameManager.Instance.GameReload();
+            else GameManager.Instance.gamePanel.ReloadGame();
+            Report("已由控制台重启游戏");
             return;
         }
         Report("<color=red>未知指令，使用Help查询可用指令</color>");

@@ -1,4 +1,5 @@
 
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class GameManager
@@ -67,8 +68,12 @@ public class GameManager
         if (gamePanel != null) 
         {
             if (isRaw) gamePanel.gameResult.text = "平局!";
-            else gamePanel.gameResult.text = (GameLogic.Instance.isPlayerTurn ? "玩家" : "电脑") + "胜利!";
-            gamePanel.EndGame();
+            else
+            {
+                gamePanel.gameResult.text = (GameLogic.Instance.isPlayerTurn ? "玩家" : "电脑") + "胜利!";
+                Debug.Log(gameLogic.winWay);
+            }
+            gamePanel.EndGame(isRaw);
         }
         if (qACentre != null)
             qACentre.RecordThisGameSet(isRaw, GameLogic.Instance.isPlayerTurn);
